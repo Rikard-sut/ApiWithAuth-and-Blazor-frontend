@@ -8,5 +8,6 @@ namespace BlazorApp.AuthProviders
     {
         Task<AuthResponseDTO> Login(LoginModel userForAuthentication);
         Task Logout();
+        Task<RegistrationResponseDto> RegisterUser(RegisterModel userForRegistration);
     }
 }

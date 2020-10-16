@@ -21,6 +21,7 @@ namespace ApiWithAuth
 {
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -31,6 +32,15 @@ namespace ApiWithAuth
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Sets which urls can access the api. For now it allows any url.
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin().AllowAnyHeader(); //todo: Change here, allowany is for development purposes only.
+                    });
+            });
             services.AddControllers();
 
             // For Entity Framework  
@@ -76,6 +86,7 @@ namespace ApiWithAuth
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCors();
             app.UseAuthentication();
 
             app.UseAuthorization();

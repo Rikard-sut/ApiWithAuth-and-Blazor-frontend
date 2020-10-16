@@ -21,9 +21,14 @@ namespace BlazorApp
             builder.RootComponents.Add<App>("app");
             builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddAuthorizationCore();
+            builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            builder.Services.AddScoped(sp =>
+            {
+                Uri uri = new Uri("https://localhost:44352"); //If you started this through github, check the portnumber for WebapiWithauth and copy paste it into here. make sure its not the same as the webapplication portnumber.
+                return new HttpClient { BaseAddress = uri };
+            });
 
             await builder.Build().RunAsync();
         }
