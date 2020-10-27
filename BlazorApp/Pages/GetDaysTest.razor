@@ -1,0 +1,53 @@
+﻿@page "/getDays"
+@inject HttpClient Http
+
+
+@if(days == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    foreach(var day in days)
+    {
+        <p>@day.NameOfDay</p>
+        if(day.TodoTasks.Count <= 0)
+        {
+            <p>No tasks for this day yet.</p>
+        }
+        else
+        {
+            foreach(var todoTask in day.TodoTasks)
+            {
+                <p>@todoTask.Description @todoTask.IsCompleted</p>
+            }
+        }
+    }
+}
+@code {
+
+    private Day[] days;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            days = await Http.GetFromJsonAsync<Day[]>("/api/getDays");
+        }
+        catch
+        {
+            Console.WriteLine("Something went wrong");
+        }
+    }
+
+    public class Day
+    {
+        public string NameOfDay { get; set; }
+        public List<TodoTask> TodoTasks { get; set; }
+    }
+    public class TodoTask
+    {
+        public string Description { get; set; }
+        public bool IsCompleted { get; set; }
+    }
+}

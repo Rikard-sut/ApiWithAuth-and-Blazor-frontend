@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ApiWithAuth.Authentication;
+using ApiWithAuth.TodoDbEntities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -41,9 +42,15 @@ namespace ApiWithAuth
                         builder.AllowAnyOrigin().AllowAnyHeader(); //todo: Change here, allowany is for development purposes only.
                     });
             });
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+
+                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
+
+            services.AddScoped<ISqlService, SqlService>();
 
             // For Entity Framework  
+            services.AddDbContext<TodoDbContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DataConnstr")));
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ConnStr")));
 
             // For Identity  
