@@ -1,0 +1,36 @@
+﻿@page "/dayOfWeek/{Id:int}"
+@inject HttpClient Http
+@using BlazorApp.Models
+
+
+@if (day == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div>
+        <h3>@day.NameOfDay</h3>
+        @foreach (var item in day.TodoTasks)
+        {
+            <p>@item.Description @item.IsCompleted</p>
+        }
+    </div>
+}
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private Day day;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            day = await Http.GetFromJsonAsync<Day>("/dayOfWeek/" + Id);
+        }
+        catch
+        {
+            Console.WriteLine("Something went wrong");
+        }
+    }
+}

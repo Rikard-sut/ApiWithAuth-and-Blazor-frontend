@@ -30,18 +30,18 @@ namespace ApiWithAuth.Controllers
         public async Task<IEnumerable<Day>> Get()
         {
             var userName = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Name).Value;
-            
+
             var response = await _SqlService.GetDaysAsync(userName);
             return response.ToArray();
+        }
+        [HttpGet]
+        [Route("/dayOfWeek/{id}")]
+        public async Task<Day> GetDay(int id)
+        {
+            var userName = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Name).Value;
 
-            //var rng = new Random();
-            //return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            //{
-            //    Date = DateTime.Now.AddDays(index),
-            //    TemperatureC = rng.Next(-20, 55),
-            //    Summary = Summaries[rng.Next(Summaries.Length)]
-            //})
-            //.ToArray();
+            var response = await _SqlService.GetDayAsync(userName, id);
+            return response;
         }
     }
 }

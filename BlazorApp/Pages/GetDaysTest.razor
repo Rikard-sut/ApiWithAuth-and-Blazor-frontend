@@ -1,27 +1,34 @@
 ﻿@page "/getDays"
 @inject HttpClient Http
+@inject NavigationManager NavManager
+@using BlazorApp.Models
 
 
-@if(days == null)
+@if (days == null)
 {
     <p>Loading...</p>
 }
 else
 {
-    foreach(var day in days)
+
+    foreach (var day in days)
     {
-        <p>@day.NameOfDay</p>
-        if(day.TodoTasks.Count <= 0)
-        {
-            <p>No tasks for this day yet.</p>
-        }
-        else
-        {
-            foreach(var todoTask in day.TodoTasks)
+        <div @onclick="(e=>NavToDay(day.DayId))">
+            <p>@day.NameOfDay</p>
+            @if (day.TodoTasks.Count <= 0)
             {
-                <p>@todoTask.Description @todoTask.IsCompleted</p>
+                <p>No tasks for this day yet.</p>
             }
-        }
+            else
+            {
+                foreach (var todoTask in day.TodoTasks)
+                {
+                    <p>@todoTask.Description @todoTask.IsCompleted</p>
+                }
+            }
+        </div>
+
+
     }
 }
 @code {
@@ -40,14 +47,8 @@ else
         }
     }
 
-    public class Day
+    public void NavToDay(int dayId)
     {
-        public string NameOfDay { get; set; }
-        public List<TodoTask> TodoTasks { get; set; }
-    }
-    public class TodoTask
-    {
-        public string Description { get; set; }
-        public bool IsCompleted { get; set; }
+        NavManager.NavigateTo("/dayOfweek/" + dayId);
     }
 }
