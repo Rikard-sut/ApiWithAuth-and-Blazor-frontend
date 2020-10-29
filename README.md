@@ -8,3 +8,8 @@ For convinience while developing the blazor app and the backend are in the same 
 2. Click Webapiwithauths properties and set port number to a different port than the Blazorapp's portnumber.
 3.In webapiwithauth's appsettings.json, set validaudience to the portnumber of Blazorapp and validissuer to the portnumber of Webapiwithauth.
 4. In blazorapp's program.cs file change the api link in the httpclient to the url of webapiwithauth. (find it in the projects properties)
+
+
+
+Bugs to fix: Sometimes after closing the browser while being logged in you cannot get your days or tasks upon opening the browser again, you have to log out and log in again
+then it works. 
