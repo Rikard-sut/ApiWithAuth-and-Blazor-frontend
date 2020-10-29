@@ -2,21 +2,40 @@
 @inject HttpClient Http
 @using BlazorApp.Models
 
-
-@if (day == null)
-{
-    <p>Loading...</p>
-}
-else
-{
-    <div>
-        <h3>@day.NameOfDay</h3>
-        @foreach (var item in day.TodoTasks)
+<AuthorizeView>
+    <Authorized>
+        @if (day == null)
         {
-            <p>@item.Description @item.IsCompleted</p>
+            <p>Loading...</p>
         }
-    </div>
-}
+        else
+        {
+            <div>
+                <h3>@day.NameOfDay</h3>
+                @foreach (var item in day.TodoTasks)
+                {
+                    <p>
+                        @item.Description
+                        @if (item.IsCompleted)
+                        {
+                            <i class="fa fa-check"></i>
+                        }
+                        else
+                        {
+                            <i class="fas fa-times"></i>
+                        }
+                    </p>
+                }
+                <CascadingValue Value="Id">
+                    <AddTodoTask></AddTodoTask>
+                </CascadingValue>
+            </div>
+        }
+    </Authorized>
+    <NotAuthorized>
+        <Login></Login>
+    </NotAuthorized>
+</AuthorizeView>
 @code {
     [Parameter]
     public int Id { get; set; }

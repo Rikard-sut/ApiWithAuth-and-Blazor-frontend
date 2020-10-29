@@ -1,0 +1,61 @@
+﻿@inject HttpClient Http
+@using BlazorApp.Models
+@inject NavigationManager NavManager
+
+<AuthorizeView Context="AuthorizedView">
+    <Authorized>
+        <EditForm Model="newTodoTask" OnValidSubmit="PostTodoTask">
+            <DataAnnotationsValidator />
+            <div class="form-row">
+                <div class="form-group col-md">
+                    <label for="description">Description</label>
+                    <InputText id="description" class="form-control" @bind-Value="newTodoTask.Description" />
+                    <ValidationMessage For="@(() => newTodoTask.Description)" />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md text-right">
+                    <input type="submit" class="btn btn-success" value="Add Task" />
+                </div>
+            </div>
+        </EditForm>
+    </Authorized>
+    <NotAuthorized>
+        <Login></Login>
+    </NotAuthorized>
+</AuthorizeView>
+
+@if (Message != null)
+{
+    <p class="alert">@Message</p>
+}
+@code {
+    [CascadingParameter]
+    public int Id { get; set; }
+    private TodoTask newTodoTask { get; set; } = new TodoTask();
+    private string Message { get; set; } = null;
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if (!AuthState.Result.User.Identity.IsAuthenticated)
+        {
+            NavManager.NavigateTo("/login");
+        }
+    }
+    private async Task PostTodoTask()
+    {
+        newTodoTask.DayId = Id;
+        var response = await Http.PostAsJsonAsync<TodoTask>("api/todoTask", newTodoTask);
+        if (response.IsSuccessStatusCode)
+        {
+            Message = "Sucessfully posted the task";
+        }
+        else
+        {
+            Message = "Could not post task, try again";
+        }
+    }
+}

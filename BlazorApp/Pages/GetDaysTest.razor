@@ -3,34 +3,59 @@
 @inject NavigationManager NavManager
 @using BlazorApp.Models
 
+<AuthorizeView>
+    <Authorized>
+        @if (days == null)
+        {
+            <p>Loading...</p>
+        }
+        else
+        {
+            <div class="row">
 
-@if (days == null)
-{
-    <p>Loading...</p>
-}
-else
-{
-
-    foreach (var day in days)
-    {
-        <div @onclick="(e=>NavToDay(day.DayId))">
-            <p>@day.NameOfDay</p>
-            @if (day.TodoTasks.Count <= 0)
-            {
-                <p>No tasks for this day yet.</p>
-            }
-            else
-            {
-                foreach (var todoTask in day.TodoTasks)
+                @foreach (var day in days)
                 {
-                    <p>@todoTask.Description @todoTask.IsCompleted</p>
+
+                    <div class="col-sm-6 mb-2" @onclick="(e=>NavToDay(day.DayId))">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">@day.NameOfDay</h5>
+                                @if (day.TodoTasks.Count <= 0)
+                                {
+                                    <p class="card-text">No tasks for this day yet.</p>
+                                }
+                                else
+                                {
+                                    foreach (var todoTask in day.TodoTasks)
+                                    {
+                                        <p class="card-text">
+                                            @todoTask.Description
+                                            @if (todoTask.IsCompleted)
+                                            {
+                                                <i class="fa fa-check"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="fas fa-times"></i>
+                                            }
+                                        </p>
+
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+
                 }
-            }
-        </div>
+            </div>
+        }
+    </Authorized>
+    <NotAuthorized>
+        <Login></Login>
+    </NotAuthorized>
+</AuthorizeView>
 
-
-    }
-}
 @code {
 
     private Day[] days;

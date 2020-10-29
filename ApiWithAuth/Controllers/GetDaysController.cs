@@ -30,7 +30,7 @@ namespace ApiWithAuth.Controllers
         public async Task<IEnumerable<Day>> Get()
         {
             var userName = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Name).Value;
-
+            
             var response = await _SqlService.GetDaysAsync(userName);
             return response.ToArray();
         }
