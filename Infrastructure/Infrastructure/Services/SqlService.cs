@@ -18,11 +18,6 @@ namespace Infrastructure.Services
             _todoDb = todoDbContext;
         }
 
-        /// <summary>
-        /// Get all days with all their tasks from the db, for the right user.
-        /// </summary>
-        /// <param name="userName">The specified user we want to get data for</param>
-        /// <returns>An array of days</returns>
         public async Task<IEnumerable<DayDto>> GetDaysAsync(GetDaysQuery request)
         {
             var days = _todoDb.Days.Select(x => x).ToArray();
@@ -32,13 +27,14 @@ namespace Infrastructure.Services
 
             List<DayDto> dayDtos = new List<DayDto>();
 
-            foreach(var item in days)
+            foreach (var item in days)
             {
                 var dayDto = new DayDto { DayId = item.DayId, NameOfDay = item.NameOfDay };
                 var todoTasksForday = _todoDb.TodoTasks.Where(x => x.UserName == request.GetDaysOnUserName && x.DayId == item.DayId).ToList();
 
                 dayDto.TodoTasks = CreateTodoTaskDtos(todoTasksForday);
-                dayDtos.Add(dayDto);            }
+                dayDtos.Add(dayDto);
+            }
 
             return await Task.FromResult(dayDtos);
         }
@@ -69,6 +65,27 @@ namespace Infrastructure.Services
             return response != 0;
         }
 
+        public async Task<bool> UpdateTodoTaskAsync(UpdateTodoTaskQuery request)
+        {
+            var todoTask = _todoDb.TodoTasks.Where(x => x.TodoTaskId == request.TodoTaskId).FirstOrDefault();
+            todoTask.Description = request.Description;
+            todoTask.IsCompleted = request.IsCompleted;
+
+            int response = await _todoDb.SaveChangesAsync();
+
+            return response != 0;
+        }
+
+        public async Task<bool> ClearTodoTasksAsync(ClearTodoTasksQuery request)
+        {
+            var todoTasks = _todoDb.TodoTasks.Where(x => x.UserName == request.ClearTasksForUsername);
+            _todoDb.TodoTasks.RemoveRange(todoTasks);
+
+            int response = await _todoDb.SaveChangesAsync();
+
+            return response != 0;
+        }
+
         private static TodoTask CreateTodoTask(AddTodoTaskQuery request)
         {
             return new TodoTask { DayId = request.DayId, Description = request.Description, IsCompleted = request.IsCompleted, UserName = request.AddTodoTaskOnUsername };
@@ -79,7 +96,7 @@ namespace Infrastructure.Services
             List<TodoTaskDto> todoTaskDtos = new List<TodoTaskDto>();
             foreach (var task in todoTasksForday)
             {
-                var todoTaskDto = new TodoTaskDto { Description = task.Description, IsCompleted = task.IsCompleted };
+                var todoTaskDto = new TodoTaskDto { Description = task.Description, IsCompleted = task.IsCompleted, TodoTaskId = task.TodoTaskId };
                 todoTaskDtos.Add(todoTaskDto);
             }
             return todoTaskDtos;

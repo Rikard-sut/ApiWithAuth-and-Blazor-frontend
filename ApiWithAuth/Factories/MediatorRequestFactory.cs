@@ -35,5 +35,15 @@ namespace ApiWithAuth.Factories
         {
             return new AddTodoTaskQuery(request.Description, request.IsCompleted, request.DayId, username);
         }
+
+        internal static UpdateTodoTaskQuery GetUpdateTodoTaskQuery(UpdateTodoTaskRequest request)
+        {
+            return new UpdateTodoTaskQuery(request.TodoTaskId, request.Description, request.IsCompleted);
+        }
+
+        internal static ClearTodoTasksQuery GetClearTodoTasksQuery(string username)
+        {
+            return new ClearTodoTasksQuery(username);
+        }
     }
 }

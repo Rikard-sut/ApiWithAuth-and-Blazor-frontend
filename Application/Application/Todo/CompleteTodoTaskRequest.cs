@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Domain.TodoTask
+namespace Application.Todo
 {
-    public class TodoTaskDto
+    public class UpdateTodoTaskRequest
     {
         public int TodoTaskId { get; set; }
         public string Description { get; set; }
         public bool IsCompleted { get; set; }
-        public string Error { get; set; }
     }
 }

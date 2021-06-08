@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
-using Infrastructure.Services;
-using Infrastructure.Database.Entities;
 using MediatR;
 using ApiWithAuth.Factories;
 
@@ -36,7 +34,6 @@ namespace ApiWithAuth.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, response);
 
             return Ok(response);
-
         }
 
         [HttpGet]
