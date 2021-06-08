@@ -13,3 +13,9 @@ For convinience while developing the blazor app and the backend are in the same 
 
 Bugs to fix: Sometimes after closing the browser while being logged in you cannot get your days or tasks upon opening the browser again, you have to log out and log in again
 then it works. 
+
+Migrate db's 
+add-migration initial -Context ApplicationDbContext
+add-migration initial -Context TodoDbContext
+update-database -Context ApplicationDbContext
+update-database -Context TodoDbContext
