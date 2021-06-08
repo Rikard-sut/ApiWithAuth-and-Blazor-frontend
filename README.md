@@ -8,7 +8,8 @@ For convinience while developing the blazor app and the api/backend are in the s
 2. Click Webapiwithauths properties and set port number to a different port than the Blazorapp's portnumber.
 3. In webapiwithauth's appsettings.json, set validaudience to the portnumber of Blazorapp and validissuer to the portnumber of Webapiwithauth.
 4. In blazorapp's program.cs file change the api link in the httpclient to the url of webapiwithauth. (find it in the projects properties)
-5. Or just test the API via postman or swagger.
+5. Update connectionstring for TodoDb to your localdb or sql server
+6. Or just test the API via postman or swagger.
 
 
 
