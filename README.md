@@ -12,10 +12,10 @@ For convinience while developing the blazor app and the api/backend are in the s
 
 
 
-Migrate db's 
-add-migration initial -Context ApplicationDbContext
-add-migration initial -Context TodoDbContext
-update-database -Context ApplicationDbContext
-update-database -Context TodoDbContext
+Migrate db's before running the project using packet manager console
+1. add-migration initial -Context ApplicationDbContext
+2. add-migration initial -Context TodoDbContext
+3. update-database -Context ApplicationDbContext
+4. update-database -Context TodoDbContext
 
 Now you can test the project.
