@@ -5,7 +5,7 @@
 
 <AuthorizeView>
     <Authorized>
-        @if (days == null)
+        @if (getdays.Days == null)
         {
             <p>Loading...</p>
         }
@@ -13,7 +13,7 @@
         {
             <div class="row">
 
-                @foreach (var day in days)
+                @foreach (var day in getdays.Days)
                 {
 
                     <div class="col-sm-6 mb-2" @onclick="(e=>NavToDay(day.DayId))">
@@ -58,13 +58,13 @@
 
 @code {
 
-    private Day[] days;
+    private GetDays getdays = new GetDays();
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            days = await Http.GetFromJsonAsync<Day[]>("/api/getDays");
+            getdays = await Http.GetFromJsonAsync<GetDays>("/api/getDays");
         }
         catch
         {

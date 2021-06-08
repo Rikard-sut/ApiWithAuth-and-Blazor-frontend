@@ -4,15 +4,15 @@
 
 <AuthorizeView>
     <Authorized>
-        @if (day == null)
+        @if (GetDay.Day == null)
         {
             <p>Loading...</p>
         }
         else
         {
             <div>
-                <h3>@day.NameOfDay</h3>
-                @foreach (var item in day.TodoTasks)
+                <h3>@GetDay.Day.NameOfDay</h3>
+                @foreach (var item in GetDay.Day.TodoTasks)
                 {
                     <p>
                         @item.Description
@@ -39,13 +39,13 @@
 @code {
     [Parameter]
     public int Id { get; set; }
-    private Day day;
+    private GetDay GetDay = new GetDay();
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            day = await Http.GetFromJsonAsync<Day>("/dayOfWeek/" + Id);
+            GetDay = await Http.GetFromJsonAsync<GetDay>("/dayOfWeek/" + Id);
         }
         catch
         {

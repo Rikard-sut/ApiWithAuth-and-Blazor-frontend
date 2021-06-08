@@ -1,8 +1,11 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Threading.Tasks;
+using ApiWithAuth.Factories;
 using Application.Authentication;
 using Infrastructure.Services;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -16,30 +19,31 @@ namespace ApiWithAuth.Controllers
     {
         private readonly IAuthenticationService _authService;
         private readonly IConfiguration _configuration;
+        private readonly IMediator _mediator;
 
-        public AuthenticateController(IAuthenticationService authenticationService, IConfiguration configuration)
+        public AuthenticateController(IAuthenticationService authenticationService, IConfiguration configuration, IMediator mediator)
         {
             _authService = authenticationService;
             _configuration = configuration;
+            _mediator = mediator;
         }
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest model)
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
-            var token = await _authService.Login(model, authSigningKey, _configuration);
+            var loginQuery = MediatorRequestFactory.GetLoginUserQuery(request, _configuration);
+            var response = await _mediator.Send(loginQuery);
 
-            if (token == null)
+            if (response.Token == null)
             {
                 return Unauthorized();
-
             }
 
             return Ok(new
             {
-                token = new JwtSecurityTokenHandler().WriteToken(token),
-                expiration = token.ValidTo
+                token = new JwtSecurityTokenHandler().WriteToken(response.Token),
+                expiration = response.Token.ValidTo
             });
         }
 
@@ -47,21 +51,23 @@ namespace ApiWithAuth.Controllers
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserRequest request)
         {
-            var response = await _authService.RegisterUser(request);
+            var registerUserQuery = MediatorRequestFactory.GetRegisterUserQuery(request);
+            var response = await _mediator.Send(registerUserQuery);
 
-            if (response.Status == "Error")
-            {
+            if(response.Status == "Error")
                 return StatusCode(StatusCodes.Status500InternalServerError, response);
-            }
 
             return Ok(response);
         }
 
+        
         [HttpPost]
         [Route("register-admin")]
-        public async Task<IActionResult> RegisterAdmin([FromBody] RegisterUserRequest model)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> RegisterAdmin([FromBody] RegisterUserRequest request)
         {
-            var response = await _authService.RegisterAdmin(model);
+            var registerAdminQuery = MediatorRequestFactory.GetRegisterAdminQuery(request);
+            var response = await _mediator.Send(registerAdminQuery);
 
             if (response.Status == "Error")
             {

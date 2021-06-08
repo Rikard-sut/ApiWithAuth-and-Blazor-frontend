@@ -1,10 +1,7 @@
 ﻿using Application.Authentication;
 using Domain.Authentication;
 using Infrastructure.Authentication.Entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -26,8 +23,9 @@ namespace Infrastructure.Services
             _roleManager = roleManager;
         }
 
-        public async Task<JwtSecurityToken> Login(LoginRequest model, SymmetricSecurityKey authSigningKey, IConfiguration _configuration)
+        public async Task<JwtSecurityToken> Login(LoginUserQuery model)
         {
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(model.Config["JWT:Secret"]));
             //finds the user so we know they exists. and checks the password.
             var user = await _userManager.FindByNameAsync(model.Username);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
@@ -47,8 +45,8 @@ namespace Infrastructure.Services
 
                 //creates the token to give to the user.
                 var token = new JwtSecurityToken(
-                    issuer: _configuration["JWT:ValidIssuer"],
-                    audience: _configuration["JWT:ValidAudience"],
+                    issuer: model.Config["JWT:ValidIssuer"],
+                    audience: model.Config["JWT:ValidAudience"],
                     expires: DateTime.Now.AddHours(3),
                     claims: authClaims,
                     signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
@@ -59,7 +57,7 @@ namespace Infrastructure.Services
             return null;
         }
 
-        public async Task<RegisterUserResponse> RegisterUser(RegisterUserRequest model)
+        public async Task<RegisterUserResponse> RegisterUser(RegisterUserQuery model)
         {
             //Finds the user if it exists in the database and returns proper errormessage.
             var userExists = await _userManager.FindByNameAsync(model.Username);
@@ -77,12 +75,17 @@ namespace Infrastructure.Services
             //tries to create the user and save it in the db.
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
-                return new RegisterUserResponse { Status = "Error", Message = "User creation failed! Please check user details and try again." };
+            {
+                string errorMessage = GetErrorMessage(result);
+
+                return new RegisterUserResponse { Status = "Error", Message = errorMessage };
+            }
+
 
             return new RegisterUserResponse { Status = "Success", Message = "User created successfully!" };
         }
 
-        public async Task<RegisterUserResponse> RegisterAdmin(RegisterUserRequest model)
+        public async Task<RegisterUserResponse> RegisterAdmin(RegisterAdminQuery model)
         {
             //Finds the user if it exists in the database and returns proper errormessage.
             var userExists = await _userManager.FindByNameAsync(model.Username);
@@ -98,7 +101,11 @@ namespace Infrastructure.Services
             };
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
-                return new RegisterUserResponse { Status = "Error", Message = "User creation failed! Please check user details and try again." };
+            {
+                string errorMessage = GetErrorMessage(result);
+
+                return new RegisterUserResponse { Status = "Error", Message = errorMessage };
+            }
 
             if (!await _roleManager.RoleExistsAsync(UserRoles.Admin))
                 await _roleManager.CreateAsync(new IdentityRole(UserRoles.Admin));
@@ -111,6 +118,17 @@ namespace Infrastructure.Services
             }
 
             return new RegisterUserResponse { Status = "Success", Message = "User created successfully!" };
+        }
+
+        private static string GetErrorMessage(IdentityResult result)
+        {
+            var errorMessage = "";
+            foreach (var error in result.Errors)
+            {
+                errorMessage += error.Description + " ";
+            }
+
+            return errorMessage;
         }
 
     }

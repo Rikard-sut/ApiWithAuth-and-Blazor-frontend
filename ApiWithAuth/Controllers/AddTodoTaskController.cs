@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using ApiWithAuth.Authentication;
+using ApiWithAuth.Factories;
 using Application.Todo;
+using Domain.Authentication;
 using Infrastructure.Database.Entities;
 using Infrastructure.Services;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,31 +22,28 @@ namespace ApiWithAuth.Controllers
     public class AddTodoTaskController : ControllerBase
     {
         private readonly ILogger<AddTodoTaskController> _logger;
-        private readonly ISqlService _SqlService;
+        private readonly IMediator _mediator;
 
-        public AddTodoTaskController(ILogger<AddTodoTaskController> logger, ISqlService sqlService)
+        public AddTodoTaskController(ILogger<AddTodoTaskController> logger, IMediator mediator)
         {
             _logger = logger;
-            _SqlService = sqlService;
+            _mediator = mediator;
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddToDotaskAsync([FromBody] TodoTask todoTask)
+        [Route("add")]
+        public async Task<IActionResult> AddToDoTaskAsync([FromBody] AddTodoTaskRequest request)
         {
-            var userName = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Name).Value;
-            todoTask.UserName = userName;
-            //Todo. Mediator handler approach.
+            var addTodoTaskQuery = MediatorRequestFactory.GetAddTodoTaskQuery(request, ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Name).Value);
 
-            var response = await _SqlService.AddTodoTaskAsync(todoTask);
+            var response = await _mediator.Send(addTodoTaskQuery);
             
-            if(response == true)
+            if(!response.Success)
             {
-                return Ok(new RegisterUserResponse { Status = "Success", Message = "Sucessfully added task" });
+                return StatusCode(StatusCodes.Status500InternalServerError, response);
             }
-            else
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new RegisterUserResponse { Status = "Error", Message = "Task creation failed, please try again." });
-            }
+
+            return Ok(response);
         }
     }
 }

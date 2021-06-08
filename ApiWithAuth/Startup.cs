@@ -1,4 +1,5 @@
 using System.Text;
+using MediatR;
 using Infrastructure.Authentication;
 using Infrastructure.Authentication.Entities;
 using Infrastructure.Database;
@@ -34,9 +35,12 @@ namespace ApiWithAuth
                 options.AddDefaultPolicy(
                     builder =>
                     {
-                        builder.AllowAnyOrigin().AllowAnyHeader(); //todo: Change here, allowany is for development purposes only.
+                        builder.AllowAnyOrigin().AllowAnyHeader();
                     });
             });
+
+            services.AddMediatR(typeof(Startup));
+
             services.AddControllers().AddNewtonsoftJson(options =>
 
                  options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
@@ -81,6 +85,7 @@ namespace ApiWithAuth
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Domain.Authentication;
+using MediatR;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -15,7 +17,5 @@ namespace Application.Authentication
         public string Email { get; set; }
         [Required(ErrorMessage ="Password is Required!")]
         public string Password { get; set; }
-
-
     }
 }

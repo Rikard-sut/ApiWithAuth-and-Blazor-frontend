@@ -7,15 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiWithAuth", "ApiWithAuth\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorApp", "BlazorApp\BlazorApp.csproj", "{8C2DCA6E-40F2-4B85-B235-7DCC7382EF3F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authmodels", "ClassLibrary1\Authmodels.csproj", "{758AD9E0-592E-4A78-9C03-12EA5E5897B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure\Infrastructure.csproj", "{4C706271-753C-4937-A269-D3464013BA01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure\Infrastructure.csproj", "{4C706271-753C-4937-A269-D3464013BA01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application\Application.csproj", "{3C843435-8EB8-48E1-9DFE-00ED7E718F00}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application\Application.csproj", "{3C843435-8EB8-48E1-9DFE-00ED7E718F00}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain\Domain.csproj", "{578F49DE-70EA-442A-8BE4-6BCFDD183B03}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{0AB992B4-3ED4-4B8E-BD1E-18C219441B05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain\Domain.csproj", "{578F49DE-70EA-442A-8BE4-6BCFDD183B03}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,10 +27,6 @@ Global
 		{8C2DCA6E-40F2-4B85-B235-7DCC7382EF3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C2DCA6E-40F2-4B85-B235-7DCC7382EF3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C2DCA6E-40F2-4B85-B235-7DCC7382EF3F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{758AD9E0-592E-4A78-9C03-12EA5E5897B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{758AD9E0-592E-4A78-9C03-12EA5E5897B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{758AD9E0-592E-4A78-9C03-12EA5E5897B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{758AD9E0-592E-4A78-9C03-12EA5E5897B5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4C706271-753C-4937-A269-D3464013BA01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4C706271-753C-4937-A269-D3464013BA01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C706271-753C-4937-A269-D3464013BA01}.Release|Any CPU.ActiveCfg = Release|Any CPU

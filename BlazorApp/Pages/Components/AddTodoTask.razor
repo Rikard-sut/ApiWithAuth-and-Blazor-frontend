@@ -48,7 +48,7 @@
     private async Task PostTodoTask()
     {
         newTodoTask.DayId = Id;
-        var response = await Http.PostAsJsonAsync<TodoTask>("api/todoTask", newTodoTask);
+        var response = await Http.PostAsJsonAsync<TodoTask>("api/todoTask/add", newTodoTask);
         if (response.IsSuccessStatusCode)
         {
             Message = "Sucessfully posted the task";

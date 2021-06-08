@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
-using ApiWithAuth.Authentication;
 using Infrastructure.Services;
 using Infrastructure.Database.Entities;
+using MediatR;
+using ApiWithAuth.Factories;
 
 namespace ApiWithAuth.Controllers
 {
@@ -19,30 +16,41 @@ namespace ApiWithAuth.Controllers
     [ApiController]
     public class GetDaysController : ControllerBase
     {
-
         private readonly ILogger<GetDaysController> _logger;
-        private readonly ISqlService _SqlService;
-        public GetDaysController(ILogger<GetDaysController> logger, ISqlService sqlService)
+        private readonly IMediator _mediator;
+
+        public GetDaysController(ILogger<GetDaysController> logger, IMediator mediator)
         {
             _logger = logger;
-            _SqlService = sqlService;
+            _mediator = mediator;
         }
+
         [HttpGet]
-        public async Task<IEnumerable<Day>> Get()
+        public async Task<IActionResult> GetDays()
         {
-            var userName = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Name).Value;
-            
-            var response = await _SqlService.GetDaysAsync(userName);
-            return response.ToArray();
+            var getDaysQuery = MediatorRequestFactory.GetGetDaysQuery(((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Name).Value);
+
+            var response = await _mediator.Send(getDaysQuery);
+
+            if (response.Error != null)
+                return StatusCode(StatusCodes.Status500InternalServerError, response);
+
+            return Ok(response);
+
         }
+
         [HttpGet]
         [Route("/dayOfWeek/{id}")]
-        public async Task<Day> GetDay(int id)
+        public async Task<IActionResult> GetDay(int id)
         {
-            var userName = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Name).Value;
+            var getDayQuery = MediatorRequestFactory.GetGetDayQuery(id, ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Name).Value);
 
-            var response = await _SqlService.GetDayAsync(userName, id);
-            return response;
+            var response = await _mediator.Send(getDayQuery);
+
+            if (response.Error != null)
+                return StatusCode(StatusCodes.Status500InternalServerError, response);
+
+            return Ok(response);
         }
     }
 }
