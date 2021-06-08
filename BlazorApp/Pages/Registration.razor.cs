@@ -1,4 +1,4 @@
-﻿using ApiWithAuth.Authentication;
+﻿using BlazorApp.AuthModels;
 using BlazorApp.AuthProviders;
 using Microsoft.AspNetCore.Components;
 using System;

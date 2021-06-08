@@ -1,21 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using ApiWithAuth.Authentication;
-using ApiWithAuth.TodoDbEntities;
+using Infrastructure.Authentication;
+using Infrastructure.Authentication.Entities;
+using Infrastructure.Database;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ApiWithAuth
@@ -48,6 +43,7 @@ namespace ApiWithAuth
             );
 
             services.AddScoped<ISqlService, SqlService>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
 
             // For Entity Framework  
             services.AddDbContext<TodoDbContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DataConnstr")));

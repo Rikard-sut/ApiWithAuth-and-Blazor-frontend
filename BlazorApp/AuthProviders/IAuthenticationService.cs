@@ -1,6 +1,5 @@
-﻿using ApiWithAuth.Authentication;
-using System.Threading.Tasks;
-using Authmodels;
+﻿using System.Threading.Tasks;
+using BlazorApp.AuthModels;
 
 namespace BlazorApp.AuthProviders
 {

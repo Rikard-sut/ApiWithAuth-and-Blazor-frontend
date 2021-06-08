@@ -1,5 +1,5 @@
-﻿using ApiWithAuth.Authentication;
-using Authmodels;
+﻿
+using BlazorApp.AuthModels;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using System;

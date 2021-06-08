@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using ApiWithAuth.TodoDbEntities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using ApiWithAuth.Authentication;
+using Infrastructure.Services;
+using Infrastructure.Database.Entities;
 
 namespace ApiWithAuth.Controllers
 {

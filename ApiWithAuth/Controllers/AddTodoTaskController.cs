@@ -4,7 +4,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ApiWithAuth.Authentication;
-using ApiWithAuth.TodoDbEntities;
+using Application.Todo;
+using Infrastructure.Database.Entities;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,26 +21,29 @@ namespace ApiWithAuth.Controllers
     {
         private readonly ILogger<AddTodoTaskController> _logger;
         private readonly ISqlService _SqlService;
+
         public AddTodoTaskController(ILogger<AddTodoTaskController> logger, ISqlService sqlService)
         {
             _logger = logger;
             _SqlService = sqlService;
         }
+
         [HttpPost]
         public async Task<IActionResult> AddToDotaskAsync([FromBody] TodoTask todoTask)
         {
             var userName = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Name).Value;
             todoTask.UserName = userName;
+            //Todo. Mediator handler approach.
 
             var response = await _SqlService.AddTodoTaskAsync(todoTask);
             
             if(response == true)
             {
-                return Ok(new Response { Status = "Success", Message = "Sucessfully added task" });
+                return Ok(new RegisterUserResponse { Status = "Success", Message = "Sucessfully added task" });
             }
             else
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Task creation failed, please try again." });
+                return StatusCode(StatusCodes.Status500InternalServerError, new RegisterUserResponse { Status = "Error", Message = "Task creation failed, please try again." });
             }
         }
     }
