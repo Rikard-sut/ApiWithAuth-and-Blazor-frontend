@@ -101,5 +101,14 @@ namespace Infrastructure.Services
             }
             return todoTaskDtos;
         }
+
+        public async Task<bool> CompleteTodoTaskAsync(CompleteTodoTaskQuery request)
+        {
+            var todoTask = _todoDb.TodoTasks.Where(x => x.TodoTaskId == request.TodoTaskId).FirstOrDefault();
+            todoTask.IsCompleted = true;
+            var response = await _todoDb.SaveChangesAsync();
+
+            return response != 0;
+        }
     }
 }

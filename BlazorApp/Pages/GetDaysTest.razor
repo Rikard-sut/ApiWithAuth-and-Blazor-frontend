@@ -49,6 +49,9 @@
 
                 }
             </div>
+            <div>
+                <input type="button" class="btn btn-danger" value="Clear week" @onclick="(e=> ClearAllTasksForUser())"/>
+            </div>
         }
     </Authorized>
     <NotAuthorized>
@@ -75,5 +78,11 @@
     public void NavToDay(int dayId)
     {
         NavManager.NavigateTo("/dayOfweek/" + dayId);
+    }
+
+    public async Task ClearAllTasksForUser()
+    {
+        var response = await Http.GetAsync("api/todoTask/clear");
+        StateHasChanged();
     }
 }

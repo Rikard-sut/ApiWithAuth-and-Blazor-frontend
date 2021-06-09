@@ -12,5 +12,6 @@ namespace Infrastructure.Services
         Task<bool> AddTodoTaskAsync(AddTodoTaskQuery request);
         Task<bool> UpdateTodoTaskAsync(UpdateTodoTaskQuery request);
         Task<bool> ClearTodoTasksAsync(ClearTodoTasksQuery request);
+        Task<bool> CompleteTodoTaskAsync(CompleteTodoTaskQuery request);
     }
 }

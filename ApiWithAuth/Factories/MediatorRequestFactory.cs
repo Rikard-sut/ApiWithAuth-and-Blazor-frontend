@@ -45,5 +45,10 @@ namespace ApiWithAuth.Factories
         {
             return new ClearTodoTasksQuery(username);
         }
+
+        internal static CompleteTodoTaskQuery GetCompleteTodoTaskQuery(int todoTaskId)
+        {
+            return new CompleteTodoTaskQuery(todoTaskId);
+        }
     }
 }

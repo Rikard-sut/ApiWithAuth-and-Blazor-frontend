@@ -4,19 +4,20 @@
 
 <AuthorizeView Context="AuthorizedView">
     <Authorized>
-        <EditForm Model="newTodoTask" OnValidSubmit="PostTodoTask">
+        <EditForm Model="editTodoTask" OnValidSubmit="UpdateTodoTask">
             <DataAnnotationsValidator />
-            <div class="form-row">
+            <div class="form-row mt-5">
                 <div class="form-group col-md">
-                    <label for="description">New TodoTask:</label>
-                    <InputText id="description" class="form-control" @bind-Value="newTodoTask.Description" />
-                    <ValidationMessage For="@(() => newTodoTask.Description)" />
+                    <label for="description">Description</label>
+                    <InputText id="description" class="form-control" @bind-Value="editTodoTask.Description" />
+                    <ValidationMessage For="@(() => editTodoTask.Description)" />
+
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group col-md text-right">
-                    <input type="submit" class="btn btn-success" value="Add Task" />
+                    <input type="submit" class="btn btn-success" value="edit" />
                 </div>
             </div>
         </EditForm>
@@ -33,7 +34,8 @@
 @code {
     [CascadingParameter]
     public int Id { get; set; }
-    private TodoTask newTodoTask { get; set; } = new TodoTask();
+
+    private TodoTask editTodoTask { get; set; } = new TodoTask();
     private string Message { get; set; } = null;
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; }
@@ -41,21 +43,21 @@
     protected override void OnInitialized()
     {
         if (!AuthState.Result.User.Identity.IsAuthenticated)
-        {
+        {   
             NavManager.NavigateTo("/login");
         }
     }
-    private async Task PostTodoTask()
+    private async Task UpdateTodoTask()
     {
-        newTodoTask.DayId = Id;
-        var response = await Http.PostAsJsonAsync<TodoTask>("api/todoTask/add", newTodoTask);
+        editTodoTask.TodoTaskId = Id;
+        var response = await Http.PostAsJsonAsync<TodoTask>("api/todoTask/update", editTodoTask);
         if (response.IsSuccessStatusCode)
         {
-            Message = "Sucessfully posted the task";
+            Message = "Sucessfully updated the task";
         }
         else
         {
-            Message = "Could not post task, try again";
+            Message = "Could not update task, try again";
         }
     }
 }

@@ -46,6 +46,8 @@ namespace ApiWithAuth
                  options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
 
+            services.AddSwaggerGen();
+
             services.AddScoped<ISqlService, SqlService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
 
@@ -90,6 +92,13 @@ namespace ApiWithAuth
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "TodoTask APi V1");
+            });
 
             app.UseHttpsRedirection();
 

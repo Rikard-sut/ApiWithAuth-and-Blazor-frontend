@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using ApiWithAuth.Factories;
 using Application.Todo;
@@ -47,6 +48,20 @@ namespace ApiWithAuth.Controllers
             var updateTodoTaskQuery = MediatorRequestFactory.GetUpdateTodoTaskQuery(request);
 
             var response = await _mediator.Send(updateTodoTaskQuery);
+
+            if (!response.Success)
+                return StatusCode(StatusCodes.Status500InternalServerError, response);
+
+            return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("complete/{todoTaskId}")]
+        public async Task<IActionResult> CompleteTodoTaskAsync(int todoTaskId)
+        {
+            var completeTodoTaskQuery = MediatorRequestFactory.GetCompleteTodoTaskQuery(todoTaskId);
+
+            var response = await _mediator.Send(completeTodoTaskQuery);
 
             if (!response.Success)
                 return StatusCode(StatusCodes.Status500InternalServerError, response);

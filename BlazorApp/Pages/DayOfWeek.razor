@@ -24,11 +24,28 @@
                         {
                             <i class="fas fa-times"></i>
                         }
+                        <input type="button" class="btn btn-outline-dark" value="Complete" @onclick="(e => CompleteTask(item.TodoTaskId))" />
+                        <input type="button" class="btn btn-outline-dark fa-align-right" value="Edit" @onclick="(e => ShowEdit(viewEdit, item.TodoTaskId))" />
                     </p>
+
+
+
                 }
-                <CascadingValue Value="Id">
-                    <AddTodoTask></AddTodoTask>
-                </CascadingValue>
+
+                <input type="button" class="btn btn-outline-dark" value="Add new Task" @onclick="(e => ShowAdd(viewAdd))" />
+
+                @if (viewEdit)
+                {
+                    <CascadingValue Value="taskId">
+                        <EditTodoTask></EditTodoTask>
+                    </CascadingValue>
+                }
+                @if (viewAdd)
+                {
+                    <CascadingValue Value="Id">
+                        <AddTodoTask></AddTodoTask>
+                    </CascadingValue>
+                }
             </div>
         }
     </Authorized>
@@ -40,6 +57,9 @@
     [Parameter]
     public int Id { get; set; }
     private GetDay GetDay = new GetDay();
+    bool viewEdit = false;
+    bool viewAdd = false;
+    public int taskId;
 
     protected override async Task OnInitializedAsync()
     {
@@ -51,5 +71,30 @@
         {
             Console.WriteLine("Something went wrong");
         }
+    }
+
+    private void ShowEdit(bool editvalue, int currentTaskId)
+    {
+        taskId = currentTaskId;
+        if (editvalue == false)
+            viewEdit = true;
+
+        if (editvalue == true)
+            viewEdit = false;
+    }
+
+    private void ShowAdd(bool addvalue)
+    {
+        if (addvalue == false)
+            viewAdd = true;
+
+        if (addvalue == true)
+            viewAdd = false;
+
+    }
+
+    private async Task CompleteTask(int taskId)
+    {
+        var response = await Http.GetAsync("api/todoTask/complete/" + taskId);
     }
 }
