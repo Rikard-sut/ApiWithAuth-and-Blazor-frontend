@@ -2,7 +2,6 @@
 using Domain.Authentication;
 using Infrastructure.Services;
 using MediatR;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 

@@ -2,9 +2,6 @@
 using Domain.Authentication;
 using Infrastructure.Services;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,7 +20,7 @@ namespace ApiWithAuth.Handlers.Authentication
         {
             var token = await _authenticationService.Login(request);
 
-            return new LoginUserResponse { Token = token };         
+            return new LoginUserResponse { Token = token };
         }
     }
 }

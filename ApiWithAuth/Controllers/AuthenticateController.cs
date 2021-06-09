@@ -1,15 +1,12 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 using System.Threading.Tasks;
 using ApiWithAuth.Factories;
 using Application.Authentication;
-using Infrastructure.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 
 namespace ApiWithAuth.Controllers
 {
@@ -17,13 +14,11 @@ namespace ApiWithAuth.Controllers
     [ApiController]
     public class AuthenticateController : ControllerBase
     {
-        private readonly IAuthenticationService _authService;
         private readonly IConfiguration _configuration;
         private readonly IMediator _mediator;
 
-        public AuthenticateController(IAuthenticationService authenticationService, IConfiguration configuration, IMediator mediator)
+        public AuthenticateController(IConfiguration configuration, IMediator mediator)
         {
-            _authService = authenticationService;
             _configuration = configuration;
             _mediator = mediator;
         }
