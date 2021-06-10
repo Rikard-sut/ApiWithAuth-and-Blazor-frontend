@@ -46,7 +46,7 @@ namespace ApiWithAuth.Controllers
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserRequest request)
         {
-            var registerUserCommand = MediatorRequestFactory.GetRegisterUseCommand(request);
+            var registerUserCommand = MediatorRequestFactory.GetRegisterUserCommand(request);
             var response = await _mediator.Send(registerUserCommand);
 
             if(response.Status == "Error")

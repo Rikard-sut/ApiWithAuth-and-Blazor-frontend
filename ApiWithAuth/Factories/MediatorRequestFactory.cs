@@ -11,7 +11,7 @@ namespace ApiWithAuth.Factories
             return new LoginUserCommand(request.Username, request.Password, configuration);
         }
 
-        internal static RegisterUserCommand GetRegisterUseCommand(RegisterUserRequest request)
+        internal static RegisterUserCommand GetRegisterUserCommand(RegisterUserRequest request)
         {
             return new RegisterUserCommand(request.Username, request.Email, request.Password);
         }

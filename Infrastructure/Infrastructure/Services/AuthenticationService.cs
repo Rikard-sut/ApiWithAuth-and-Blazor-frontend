@@ -59,12 +59,10 @@ namespace Infrastructure.Services
 
         public async Task<RegisterUserResponse> RegisterUser(RegisterUserCommand command)
         {
-            //Finds the user if it exists in the database and returns proper errormessage.
             var userExists = await _userManager.FindByNameAsync(command.Username);
             if (userExists != null)
                 return new RegisterUserResponse { Status = "Error", Message = "User already exists!" };
 
-            //Creates a new applicationuser from the info of RegisterModel coming in frombody.
             ApplicationUser user = new ApplicationUser()
             {
                 Email = command.Email,
@@ -72,7 +70,6 @@ namespace Infrastructure.Services
                 UserName = command.Username
             };
 
-            //tries to create the user and save it in the db.
             var result = await _userManager.CreateAsync(user, command.Password);
             if (!result.Succeeded)
             {
@@ -80,7 +77,6 @@ namespace Infrastructure.Services
 
                 return new RegisterUserResponse { Status = "Error", Message = errorMessage };
             }
-
 
             return new RegisterUserResponse { Status = "Success", Message = "User created successfully!" };
         }
