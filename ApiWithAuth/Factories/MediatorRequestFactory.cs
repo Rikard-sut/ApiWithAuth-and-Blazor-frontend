@@ -6,19 +6,19 @@ namespace ApiWithAuth.Factories
 {
     internal static class MediatorRequestFactory
     {
-        internal static LoginUserQuery GetLoginUserQuery(LoginRequest request, IConfiguration configuration)
+        internal static LoginUserCommand GetLoginUserCommand(LoginRequest request, IConfiguration configuration)
         {
-            return new LoginUserQuery(request.Username, request.Password, configuration);
+            return new LoginUserCommand(request.Username, request.Password, configuration);
         }
 
-        internal static RegisterUserQuery GetRegisterUserQuery(RegisterUserRequest request)
+        internal static RegisterUserCommand GetRegisterUseCommand(RegisterUserRequest request)
         {
-            return new RegisterUserQuery(request.Username, request.Email, request.Password);
+            return new RegisterUserCommand(request.Username, request.Email, request.Password);
         }
 
-        internal static RegisterUserQuery GetRegisterAdminQuery(RegisterUserRequest request)
+        internal static RegisterUserCommand GetRegisterAdminCommand(RegisterUserRequest request)
         {
-            return new RegisterUserQuery(request.Username, request.Email, request.Password);
+            return new RegisterUserCommand(request.Username, request.Email, request.Password);
         }
 
         internal static GetDaysQuery GetGetDaysQuery(string username)
@@ -31,24 +31,24 @@ namespace ApiWithAuth.Factories
             return new GetDayQuery(dayId, username);
         }
 
-        internal static AddTodoTaskQuery GetAddTodoTaskQuery(AddTodoTaskRequest request, string username)
+        internal static AddTodoTaskCommand GetAddTodoTaskCommand(AddTodoTaskRequest request, string username)
         {
-            return new AddTodoTaskQuery(request.Description, request.IsCompleted, request.DayId, username);
+            return new AddTodoTaskCommand(request.Description, request.IsCompleted, request.DayId, username);
         }
 
-        internal static UpdateTodoTaskQuery GetUpdateTodoTaskQuery(UpdateTodoTaskRequest request)
+        internal static UpdateTodoTaskCommand GetUpdateTodoTaskCommand(UpdateTodoTaskRequest request)
         {
-            return new UpdateTodoTaskQuery(request.TodoTaskId, request.Description, request.IsCompleted);
+            return new UpdateTodoTaskCommand(request.TodoTaskId, request.Description, request.IsCompleted);
         }
 
-        internal static ClearTodoTasksQuery GetClearTodoTasksQuery(string username)
+        internal static ClearTodoTasksCommand GetClearTodoTasksCommand(string username)
         {
-            return new ClearTodoTasksQuery(username);
+            return new ClearTodoTasksCommand(username);
         }
 
-        internal static CompleteTodoTaskQuery GetCompleteTodoTaskQuery(int todoTaskId)
+        internal static CompleteTodoTaskCommand GetCompleteTodoTaskCommand(int todoTaskId)
         {
-            return new CompleteTodoTaskQuery(todoTaskId);
+            return new CompleteTodoTaskCommand(todoTaskId);
         }
     }
 }

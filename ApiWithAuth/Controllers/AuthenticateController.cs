@@ -27,8 +27,8 @@ namespace ApiWithAuth.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var loginQuery = MediatorRequestFactory.GetLoginUserQuery(request, _configuration);
-            var response = await _mediator.Send(loginQuery);
+            var loginCommand = MediatorRequestFactory.GetLoginUserCommand(request, _configuration);
+            var response = await _mediator.Send(loginCommand);
 
             if (response.Token == null)
             {
@@ -46,8 +46,8 @@ namespace ApiWithAuth.Controllers
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserRequest request)
         {
-            var registerUserQuery = MediatorRequestFactory.GetRegisterUserQuery(request);
-            var response = await _mediator.Send(registerUserQuery);
+            var registerUserCommand = MediatorRequestFactory.GetRegisterUseCommand(request);
+            var response = await _mediator.Send(registerUserCommand);
 
             if(response.Status == "Error")
                 return StatusCode(StatusCodes.Status500InternalServerError, response);
@@ -61,8 +61,8 @@ namespace ApiWithAuth.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterUserRequest request)
         {
-            var registerAdminQuery = MediatorRequestFactory.GetRegisterAdminQuery(request);
-            var response = await _mediator.Send(registerAdminQuery);
+            var registerAdminCommand = MediatorRequestFactory.GetRegisterAdminCommand(request);
+            var response = await _mediator.Send(registerAdminCommand);
 
             if (response.Status == "Error")
             {

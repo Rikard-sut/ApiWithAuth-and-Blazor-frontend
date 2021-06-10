@@ -3,9 +3,9 @@ using MediatR;
 
 namespace Application.Todo
 {
-    public class AddTodoTaskQuery : IRequest<AddTodoTaskResponse>
+    public class AddTodoTaskCommand : IRequest<AddTodoTaskResponse>
     {
-        public AddTodoTaskQuery(string description, bool isCompleted, int dayId, string username)
+        public AddTodoTaskCommand(string description, bool isCompleted, int dayId, string username)
         {
             Description = description;
             IsCompleted = isCompleted;

@@ -3,9 +3,9 @@ using MediatR;
 
 namespace Application.Authentication
 {
-    public class RegisterAdminQuery : IRequest<RegisterUserResponse>
+    public class RegisterUserCommand : IRequest<RegisterUserResponse>
     {
-        public RegisterAdminQuery(string username, string email, string password)
+        public RegisterUserCommand(string username, string email, string password)
         {
             Username = username;
             Email = email;

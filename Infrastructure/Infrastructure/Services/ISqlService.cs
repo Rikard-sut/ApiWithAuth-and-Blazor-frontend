@@ -9,9 +9,9 @@ namespace Infrastructure.Services
     {
         Task<IEnumerable<DayDto>> GetDaysAsync(GetDaysQuery request);
         Task<DayDto> GetDayAsync(GetDayQuery request);
-        Task<bool> AddTodoTaskAsync(AddTodoTaskQuery request);
-        Task<bool> UpdateTodoTaskAsync(UpdateTodoTaskQuery request);
-        Task<bool> ClearTodoTasksAsync(ClearTodoTasksQuery request);
-        Task<bool> CompleteTodoTaskAsync(CompleteTodoTaskQuery request);
+        Task<bool> AddTodoTaskAsync(AddTodoTaskCommand command);
+        Task<bool> UpdateTodoTaskAsync(UpdateTodoTaskCommand command);
+        Task<bool> ClearTodoTasksAsync(ClearTodoTasksCommand command);
+        Task<bool> CompleteTodoTaskAsync(CompleteTodoTaskCommand command);
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ApiWithAuth.Handlers.TodoTasks
 {
-    public class AddTodoTaskHandler : IRequestHandler<AddTodoTaskQuery, AddTodoTaskResponse>
+    public class AddTodoTaskHandler : IRequestHandler<AddTodoTaskCommand, AddTodoTaskResponse>
     {
         private readonly ISqlService _todoTaskService;
 
@@ -16,9 +16,9 @@ namespace ApiWithAuth.Handlers.TodoTasks
             _todoTaskService = sqlService;
         }
 
-        public async Task<AddTodoTaskResponse> Handle(AddTodoTaskQuery request, CancellationToken cancellationToken)
+        public async Task<AddTodoTaskResponse> Handle(AddTodoTaskCommand command, CancellationToken cancellationToken)
         {
-            var response = await _todoTaskService.AddTodoTaskAsync(request);
+            var response = await _todoTaskService.AddTodoTaskAsync(command);
 
             if (!response)
                 return new AddTodoTaskResponse { Error = "Couldnt add task", Success = response };

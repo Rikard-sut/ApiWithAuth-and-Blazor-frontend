@@ -3,9 +3,9 @@ using MediatR;
 
 namespace Application.Todo
 {
-    public class ClearTodoTasksQuery : IRequest<ClearTodoTasksResponse>
+    public class ClearTodoTasksCommand : IRequest<ClearTodoTasksResponse>
     {
-        public ClearTodoTasksQuery(string username)
+        public ClearTodoTasksCommand(string username)
         {
             ClearTasksForUsername = username;
         }

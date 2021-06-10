@@ -7,8 +7,8 @@ namespace Infrastructure.Services
 {
     public interface IAuthenticationService
     {
-        Task<JwtSecurityToken> Login(LoginUserQuery model);
-        Task<RegisterUserResponse> RegisterUser(RegisterUserQuery model);
-        Task<RegisterUserResponse> RegisterAdmin(RegisterAdminQuery model);
+        Task<JwtSecurityToken> Login(LoginUserCommand command);
+        Task<RegisterUserResponse> RegisterUser(RegisterUserCommand command);
+        Task<RegisterUserResponse> RegisterAdmin(RegisterAdminCommand command);
     }
 }

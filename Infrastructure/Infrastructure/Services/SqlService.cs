@@ -55,29 +55,29 @@ namespace Infrastructure.Services
 
         }
 
-        public async Task<bool> AddTodoTaskAsync(AddTodoTaskQuery request)
+        public async Task<bool> AddTodoTaskAsync(AddTodoTaskCommand command)
         {
-            var todoTask = CreateTodoTask(request);
+            var todoTask = CreateTodoTask(command);
             await _todoDb.TodoTasks.AddAsync(todoTask);
             int response = await _todoDb.SaveChangesAsync();
 
             return response != 0;
         }
 
-        public async Task<bool> UpdateTodoTaskAsync(UpdateTodoTaskQuery request)
+        public async Task<bool> UpdateTodoTaskAsync(UpdateTodoTaskCommand command)
         {
-            var todoTask = _todoDb.TodoTasks.Where(x => x.TodoTaskId == request.TodoTaskId).FirstOrDefault();
-            todoTask.Description = request.Description;
-            todoTask.IsCompleted = request.IsCompleted;
+            var todoTask = _todoDb.TodoTasks.Where(x => x.TodoTaskId == command.TodoTaskId).FirstOrDefault();
+            todoTask.Description = command.Description;
+            todoTask.IsCompleted = command.IsCompleted;
 
             int response = await _todoDb.SaveChangesAsync();
 
             return response != 0;
         }
 
-        public async Task<bool> ClearTodoTasksAsync(ClearTodoTasksQuery request)
+        public async Task<bool> ClearTodoTasksAsync(ClearTodoTasksCommand command)
         {
-            var todoTasks = _todoDb.TodoTasks.Where(x => x.UserName == request.ClearTasksForUsername);
+            var todoTasks = _todoDb.TodoTasks.Where(x => x.UserName == command.ClearTasksForUsername);
             _todoDb.TodoTasks.RemoveRange(todoTasks);
 
             int response = await _todoDb.SaveChangesAsync();
@@ -85,9 +85,9 @@ namespace Infrastructure.Services
             return response != 0;
         }
 
-        private static TodoTask CreateTodoTask(AddTodoTaskQuery request)
+        private static TodoTask CreateTodoTask(AddTodoTaskCommand command)
         {
-            return new TodoTask { DayId = request.DayId, Description = request.Description, IsCompleted = request.IsCompleted, UserName = request.AddTodoTaskOnUsername };
+            return new TodoTask { DayId = command.DayId, Description = command.Description, IsCompleted = command.IsCompleted, UserName = command.AddTodoTaskOnUsername };
         }
 
         private List<TodoTaskDto> CreateTodoTaskDtos(List<TodoTask> todoTasksForday)
@@ -101,9 +101,9 @@ namespace Infrastructure.Services
             return todoTaskDtos;
         }
 
-        public async Task<bool> CompleteTodoTaskAsync(CompleteTodoTaskQuery request)
+        public async Task<bool> CompleteTodoTaskAsync(CompleteTodoTaskCommand command)
         {
-            var todoTask = _todoDb.TodoTasks.Where(x => x.TodoTaskId == request.TodoTaskId).FirstOrDefault();
+            var todoTask = _todoDb.TodoTasks.Where(x => x.TodoTaskId == command.TodoTaskId).FirstOrDefault();
             todoTask.IsCompleted = true;
             var response = await _todoDb.SaveChangesAsync();
 

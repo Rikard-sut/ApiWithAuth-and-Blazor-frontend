@@ -28,9 +28,9 @@ namespace ApiWithAuth.Controllers
         [Route("add")]
         public async Task<IActionResult> AddToDoTaskAsync([FromBody] AddTodoTaskRequest request)
         {
-            var addTodoTaskQuery = MediatorRequestFactory.GetAddTodoTaskQuery(request, ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Name).Value);
+            var addTodoTaskCommand = MediatorRequestFactory.GetAddTodoTaskCommand(request, ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Name).Value);
 
-            var response = await _mediator.Send(addTodoTaskQuery);
+            var response = await _mediator.Send(addTodoTaskCommand);
             
             if(!response.Success)
             {
@@ -44,9 +44,9 @@ namespace ApiWithAuth.Controllers
         [Route("update")]
         public async Task<IActionResult> UpdateTodoTaskAsync([FromBody] UpdateTodoTaskRequest request)
         {
-            var updateTodoTaskQuery = MediatorRequestFactory.GetUpdateTodoTaskQuery(request);
+            var updateTodoTaskCommand = MediatorRequestFactory.GetUpdateTodoTaskCommand(request);
 
-            var response = await _mediator.Send(updateTodoTaskQuery);
+            var response = await _mediator.Send(updateTodoTaskCommand);
 
             if (!response.Success)
                 return StatusCode(StatusCodes.Status500InternalServerError, response);
@@ -58,9 +58,9 @@ namespace ApiWithAuth.Controllers
         [Route("complete/{todoTaskId}")]
         public async Task<IActionResult> CompleteTodoTaskAsync(int todoTaskId)
         {
-            var completeTodoTaskQuery = MediatorRequestFactory.GetCompleteTodoTaskQuery(todoTaskId);
+            var completeTodoTaskCommand = MediatorRequestFactory.GetCompleteTodoTaskCommand(todoTaskId);
 
-            var response = await _mediator.Send(completeTodoTaskQuery);
+            var response = await _mediator.Send(completeTodoTaskCommand);
 
             if (!response.Success)
                 return StatusCode(StatusCodes.Status500InternalServerError, response);
@@ -72,9 +72,9 @@ namespace ApiWithAuth.Controllers
         [Route("clear")]
         public async Task<IActionResult> ClearAllTodoTasksForUser()
         {
-            var clearTodoTasksQuery = MediatorRequestFactory.GetClearTodoTasksQuery(((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Name).Value);
+            var clearTodoTasksCommand = MediatorRequestFactory.GetClearTodoTasksCommand(((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Name).Value);
 
-            var response = await _mediator.Send(clearTodoTasksQuery);
+            var response = await _mediator.Send(clearTodoTasksCommand);
 
             if (!response.Success)
                 return StatusCode(StatusCodes.Status500InternalServerError, response);

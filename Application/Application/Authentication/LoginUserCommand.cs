@@ -4,9 +4,9 @@ using Microsoft.Extensions.Configuration;
 
 namespace Application.Authentication
 {
-    public class LoginUserQuery : IRequest<LoginUserResponse>
+    public class LoginUserCommand : IRequest<LoginUserResponse>
     {
-        public LoginUserQuery(string username, string password, IConfiguration configuration)
+        public LoginUserCommand(string username, string password, IConfiguration configuration)
         {
             Username = username;
             Password = password;

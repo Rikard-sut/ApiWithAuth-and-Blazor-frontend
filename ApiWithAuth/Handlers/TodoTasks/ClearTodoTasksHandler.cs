@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ApiWithAuth.Handlers.TodoTasks
 {
-    public class ClearTodoTasksHandler : IRequestHandler<ClearTodoTasksQuery, ClearTodoTasksResponse>
+    public class ClearTodoTasksHandler : IRequestHandler<ClearTodoTasksCommand, ClearTodoTasksResponse>
     {
         private readonly ISqlService _todoTaskService;
 
@@ -19,9 +19,9 @@ namespace ApiWithAuth.Handlers.TodoTasks
             _todoTaskService = sqlService;
         }
 
-        public async Task<ClearTodoTasksResponse> Handle(ClearTodoTasksQuery request, CancellationToken cancellationToken)
+        public async Task<ClearTodoTasksResponse> Handle(ClearTodoTasksCommand command, CancellationToken cancellationToken)
         {
-            var response = await _todoTaskService.ClearTodoTasksAsync(request);
+            var response = await _todoTaskService.ClearTodoTasksAsync(command);
 
             if (!response)
                 return new ClearTodoTasksResponse { Error = "Couldnt delete tasks", Success = response };

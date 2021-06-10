@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ApiWithAuth.Handlers.Authentication
 {
-    public class LoginUserHandler : IRequestHandler<LoginUserQuery, LoginUserResponse>
+    public class LoginUserHandler : IRequestHandler<LoginUserCommand, LoginUserResponse>
     {
         private readonly IAuthenticationService _authenticationService;
 
@@ -16,9 +16,9 @@ namespace ApiWithAuth.Handlers.Authentication
             _authenticationService = authenticationService;
         }
 
-        public async Task<LoginUserResponse> Handle(LoginUserQuery request, CancellationToken cancellationToken)
+        public async Task<LoginUserResponse> Handle(LoginUserCommand command, CancellationToken cancellationToken)
         {
-            var token = await _authenticationService.Login(request);
+            var token = await _authenticationService.Login(command);
 
             return new LoginUserResponse { Token = token };
         }
